@@ -29,4 +29,5 @@ class Advertisement(models.Model):
         auto_now=True
     )
     is_draft = models.BooleanField(default=True)
+    favorit_add = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='favorit_add', null=True)
     

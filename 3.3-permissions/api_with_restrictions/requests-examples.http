@@ -41,3 +41,17 @@ Content-Type: application/json
 # фильтрация по дате
 GET {{baseUrl}}/advertisements/?created_at_after=2024-09-01
 Content-Type: application/json
+
+###
+
+# добавление объявления в избранное
+PATCH  {{baseUrl}}/advertisements/1/add_in_favorites/
+Content-Type: application/json
+Authorization: Token 7bf812c08ef148982c1bd56100e09a8abd3f1434
+
+###
+
+# получение избранных обьявлений
+GET  {{baseUrl}}/advertisements/get_favorites/
+Content-Type: application/json
+Authorization: Token aa55c3f37fcb208a82e15d32b0af1ebb3b010de9
