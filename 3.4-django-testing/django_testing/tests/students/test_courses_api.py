@@ -52,7 +52,7 @@ def test_get_list(client, course_factory):
 def test_id_filter(client, course_factory):
     course = course_factory(_quantity=10)
     random_id = random.choice([i.id for i in course])
-    response = client.get(f"/api/v1/courses/?id={random_id}")
+    response = client.get("/api/v1/courses/", {"id": random_id})
     data = response.json()
     assert response.status_code == 200
     assert 'id' and 'name' and 'students' in data[0]
@@ -63,7 +63,7 @@ def test_id_filter(client, course_factory):
 def test_name_filter(client, course_factory):
     course = course_factory(_quantity=10)
     random_name = random.choice([n.name for n in course])
-    response = client.get(f"/api/v1/courses/?name={random_name}")
+    response = client.get("/api/v1/courses/", {"name": random_name})
     data = response.json()
     assert response.status_code == 200
     assert 'id' and 'name' and 'students' in data[0]
@@ -72,11 +72,10 @@ def test_name_filter(client, course_factory):
 
 @pytest.mark.django_db
 def test_create_course(client):
-    course = Course.objects.create(name='Python')
-    response = client.get("/api/v1/courses/")
-    data = response.json()
-    assert response.status_code == 200
-    assert course.name == data[0]['name']
+    request = client.post("/api/v1/courses/",  data={'name': 'Python'})
+    data = request.json()
+    assert request.status_code == 201
+    assert data['name'] == 'Python'
 
 
 @pytest.mark.django_db
@@ -84,10 +83,8 @@ def test_update_course(client, course_factory):
     course = course_factory(_quantity=10)
     course_id = random.choice(course).id
     request = client.patch(path=f"/api/v1/courses/{course_id}/", data={"name": "Django"})
+    data = request.json()
     assert request.status_code == 200
-    response = client.get(path=f"/api/v1/courses/{course_id}/")
-    data = response.json()
-    assert response.status_code == 200
     assert data['name'] == 'Django'
 
 
